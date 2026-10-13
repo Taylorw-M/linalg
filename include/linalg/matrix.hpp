@@ -1,5 +1,6 @@
 #include <vector>
 #include <stdexcept>
+#include <cassert>
 
 
 template <typename T>
@@ -8,18 +9,33 @@ class Matrix{
     //add constructor
     std::vector<T> matrices_; //row major order
     std::size_t rows_;
-    std::size_t columns_;
+    std::size_t cols_;
+    std::size_t size() const { return matrices_.size(); }
 
     public:
 
     Matrix(std::vector<T> input, std::size_t rows,  std::size_t columns){//need rows and colomn info for operations 
         matrices_ = input;
         rows_ = rows;
-        columns_ = columns;
+        cols_ = columns;
     }
 
-    std::size_t size(Matrix A){
-        return A.matrices_.size();
+    std::size_t rows() const{
+        return rows_;
+    }
+
+    std::size_t cols() const{
+        return cols_;
+    }
+
+    T& operator()(std::size_t r, std::size_t c) {
+        assert(r < rows_ && c < cols_);
+        return matrices_[r * cols_ + c];
+    }
+
+    const T& operator()(std::size_t r, std::size_t c) const {
+        assert(r < rows_ && c < cols_);
+        return matrices_[r * cols_ + c];
     }
 
     void scalar_multiply(int r){ // make it only apply to certain rows and default to whole thing
@@ -29,19 +45,44 @@ class Matrix{
         return;
     }
 
-    Matrix matrix_addition(Matrix A, Matrix B){
-        Matrix C;
-        if(A.columns_ != B.columns_){
-            throw std::invalid_argument("These matrixes don't have the same dimensions")
+    Matrix operator+(const Matrix& other) const {
+        if (rows_ != other.rows_ || cols_ != other.cols_) {
+            throw std::invalid_argument(
+                "cannot add " + std::to_string(rows_) + "x" + std::to_string(cols_) +
+                " and " + std::to_string(other.rows_) + "x" + std::to_string(other.cols_));
         }
-         if(A.rows_ != B.rows_){
-            throw std::invalid_argument("These matrixes don't have the same dimensions")
+
+        std::vector<T> result(matrices_.size());
+        for (std::size_t i = 0; i < matrices_.size(); i++) {
+            result[i] = matrices_[i] + other.matrices_[i];
         }
-        
-        for(std::size_t i=0; i<A.size(); i++){
-            C.matrices_.push_back(A.matrices_[i] + B.matrices_[i]);
-        }
-        return C;
+
+        return Matrix(std::move(result), rows_, cols_);
     }
 
+    Matrix operator-(const Matrix& other) const {
+        if (rows_ != other.rows_ || cols_ != other.cols_) {
+            throw std::invalid_argument(
+                "cannot subtract " + std::to_string(rows_) + "x" + std::to_string(cols_) +
+                " and " + std::to_string(other.rows_) + "x" + std::to_string(other.cols_));
+        }
+
+        std::vector<T> result(matrices_.size());
+        for (std::size_t i = 0; i < matrices_.size(); i++) {
+            result[i] = matrices_[i] - other.matrices_[i];
+        }
+
+        return Matrix(std::move(result), rows_, cols_);
+    }
+
+    Matrix transpose()const{
+        std::vector<T> result;
+        result.reserve(matrices_.size());
+        for (std::size_t i = 0; i < cols_; i++) {      // rows of the result
+            for (std::size_t j = 0; j < rows_; j++) {  // columns of the result
+                result.push_back((*this)(j, i));
+            }
+        }
+        return Matrix(result,cols_,rows_);
+    }
 };
