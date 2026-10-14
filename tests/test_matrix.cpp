@@ -49,3 +49,62 @@ TEST(Matrix, MultiplyByIdentity) {
         for (std::size_t j = 0; j < 2; j++)
             EXPECT_EQ(c(i,j), a(i,j));
 }
+
+TEST(Matrix, OnebyOneMultiply){
+    Matrix<int> a({2},1,1);
+    Matrix<int> b({3},1,1);
+
+    Matrix<int> c = a * b;
+
+    EXPECT_EQ(c(0,0), 6);
+}
+
+TEST(Matrix, OnebyOneAdd){
+    Matrix<int> a({2},1,1);
+    Matrix<int> b({3},1,1);
+
+    Matrix<int> c = a + b;
+
+    EXPECT_EQ(c(0,0), 5);
+}
+
+TEST(Matrix, OnebyOneSubtract){
+    Matrix<int> a({2},1,1);
+    Matrix<int> b({3},1,1);
+
+    Matrix<int> c = a - b;
+
+    EXPECT_EQ(c(0,0), -1);
+}
+
+TEST(Matrix, OnebyOneTranspose){
+    Matrix<int> a({2}, 1,1);
+    Matrix<int> c = a.transpose();
+    
+    EXPECT_EQ(c(0,0), 2);
+    EXPECT_EQ(c.rows(), 1u);
+    EXPECT_EQ(c.cols(), 1u);
+}
+
+TEST(Matrix, AddMismatchThrows) {
+       Matrix<int> a({1,2,3,4,5,6}, 2, 3);
+       Matrix<int> b({1,2,3,4,5,6}, 3, 2);
+       EXPECT_THROW(a + b, std::invalid_argument);
+       EXPECT_THROW(a - b, std::invalid_argument);
+}
+
+TEST(Matrix, ScalarMultiply){
+    Matrix<int> a({1,2,3,4,5,6}, 2,3);
+    Matrix<int> c = a.scalar_multiply(2);
+    
+    EXPECT_EQ(c(0,0), 2);
+    EXPECT_EQ(c(0,1), 4);
+    EXPECT_EQ(c(0,2), 6);
+    EXPECT_EQ(c(1,0), 8);
+    EXPECT_EQ(c(1,1), 10);
+    EXPECT_EQ(c(1,2), 12);
+}
+
+TEST(Matrix, MatrixConstructor){
+    EXPECT_THROW(Matrix<int> a({1,2,3,4,5}, 2, 3), std::invalid_argument);
+}

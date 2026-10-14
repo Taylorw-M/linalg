@@ -20,6 +20,10 @@ class Matrix{
         matrices_ = input;
         rows_ = rows;
         cols_ = columns;
+
+        if (matrices_.size() != rows_ * cols_) {
+        throw std::invalid_argument("Dimensions don't equal matrix size");
+        }
     }
 
     std::size_t rows() const{
@@ -40,11 +44,13 @@ class Matrix{
         return matrices_[r * cols_ + c];
     }
 
-    void scalar_multiply(int r){ // make it only apply to certain rows and default to whole thing
+    Matrix scalar_multiply(int r){
+        std::vector<T> result; 
+         result.reserve(rows_ * cols_);
         for(std::size_t i=0; i< matrices_.size(); i++){
-            matrices_[i] = matrices_[i]*r;
+            result.push_back(matrices_[i]*r);
         }
-        return;
+        return Matrix(result, rows_, cols_);
     }
 
     Matrix operator+(const Matrix& other) const {
