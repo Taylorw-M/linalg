@@ -1,0 +1,96 @@
+{
+  "context": {
+    "date": "2026-10-14T16:22:30-07:00",
+    "host_name": "TdogLaptop",
+    "executable": "./build/benchmarks/bench_matrix",
+    "num_cpus": 8,
+    "mhz_per_cpu": 3302,
+    "cpu_scaling_enabled": false,
+    "caches": [
+      {
+        "type": "Data",
+        "level": 1,
+        "size": 49152,
+        "num_sharing": 1
+      },
+      {
+        "type": "Instruction",
+        "level": 1,
+        "size": 65536,
+        "num_sharing": 1
+      },
+      {
+        "type": "Unified",
+        "level": 2,
+        "size": 2621440,
+        "num_sharing": 1
+      },
+      {
+        "type": "Unified",
+        "level": 3,
+        "size": 12582912,
+        "num_sharing": 8
+      }
+    ],
+    "load_avg": [0.165039,0.166016,0.141602],
+    "library_build_type": "release"
+  },
+  "benchmarks": [
+    {
+      "name": "BM_NaiveMultiply/64",
+      "family_index": 0,
+      "per_family_instance_index": 0,
+      "run_name": "BM_NaiveMultiply/64",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 4385,
+      "real_time": 1.5425338107137993e+05,
+      "cpu_time": 1.5424711607753707e+05,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_NaiveMultiply/128",
+      "family_index": 0,
+      "per_family_instance_index": 1,
+      "run_name": "BM_NaiveMultiply/128",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 344,
+      "real_time": 1.8603425145302871e+06,
+      "cpu_time": 1.8601455116279062e+06,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_NaiveMultiply/256",
+      "family_index": 0,
+      "per_family_instance_index": 2,
+      "run_name": "BM_NaiveMultiply/256",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 35,
+      "real_time": 1.7931668114241414e+07,
+      "cpu_time": 1.7929667057142850e+07,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_NaiveMultiply/512",
+      "family_index": 0,
+      "per_family_instance_index": 3,
+      "run_name": "BM_NaiveMultiply/512",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 3,
+      "real_time": 1.8422014099996886e+08,
+      "cpu_time": 1.8421770933333325e+08,
+      "time_unit": "ns"
+    }
+  ]
+}
