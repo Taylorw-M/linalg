@@ -1,6 +1,8 @@
 #include <vector>
 #include <stdexcept>
 #include <cassert>
+#include <string>
+#include <utility>
 
 
 template <typename T>
@@ -84,5 +86,24 @@ class Matrix{
             }
         }
         return Matrix(result,cols_,rows_);
+    }
+
+    Matrix operator*(const Matrix& other) const{
+        if (cols_ != other.rows_) {
+            throw std::invalid_argument("cannot multiply " + std::to_string(rows_) + "x" + std::to_string(cols_) +
+                                        " by " + std::to_string(other.rows_) + "x" + std::to_string(other.cols_));
+        }
+        std::vector<T> result;
+        result.reserve(rows_ * other.cols_);
+        for(std::size_t i = 0; i<rows_; i++){// i = Ar
+            for(std::size_t j = 0; j<other.cols_; j++){// j = Bc
+                T sum = 0;
+                for(std::size_t k = 0; k<cols_; k++){//k = Ac & Br
+                    sum += ((*this)(i,k) * other(k,j));
+                }
+                result.push_back(sum);
+            }
+        }
+        return Matrix(std::move(result), rows_, other.cols_);
     }
 };
