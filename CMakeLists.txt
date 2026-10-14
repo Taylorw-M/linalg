@@ -17,3 +17,4 @@ target_include_directories(linalg INTERFACE include)
 # Tests
 enable_testing()
 add_subdirectory(tests)
+add_subdirectory(benchmarks)
