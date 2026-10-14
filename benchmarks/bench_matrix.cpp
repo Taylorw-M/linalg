@@ -8,5 +8,8 @@ static void BM_NaiveMultiply(benchmark::State& state) {
     for (auto _ : state) {
         benchmark::DoNotOptimize(a * b);
     }
+    state.counters["GFLOPS"] = benchmark::Counter(
+    2.0 * n * n * n, benchmark::Counter::kIsIterationInvariantRate,
+    benchmark::Counter::kIs1000);
 }
-BENCHMARK(BM_NaiveMultiply)->Arg(64)->Arg(128)->Arg(256)->Arg(512);
+BENCHMARK(BM_NaiveMultiply)->Arg(64)->Arg(128)->Arg(256)->Arg(512)->Arg(1024);
