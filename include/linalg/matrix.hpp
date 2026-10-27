@@ -112,4 +112,24 @@ class Matrix{
         }
         return Matrix(std::move(result), rows_, other.cols_);
     }
+
+    Matrix multiply_ikj(const Matrix& other) const{
+         if (cols_ != other.rows_) {
+            throw std::invalid_argument("cannot multiply " + std::to_string(rows_) + "x" + std::to_string(cols_) +
+                                        " by " + std::to_string(other.rows_) + "x" + std::to_string(other.cols_));
+        }
+
+        std::vector<T> result(rows_ * other.cols_);
+    
+        for(std::size_t i = 0; i<rows_; i++){
+            for(std::size_t k = 0; k<cols_; k++){
+                const T a_ik = (*this)(i, k);
+
+                for(std::size_t j = 0; j< other.cols_; j++){
+                    result[i * other.cols_ + j] += a_ik * other(k, j);
+                }
+            }
+        }
+        return Matrix(std::move(result), rows_, other.cols_);
+    }
 };

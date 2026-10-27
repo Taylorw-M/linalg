@@ -108,3 +108,40 @@ TEST(Matrix, ScalarMultiply){
 TEST(Matrix, MatrixConstructor){
     EXPECT_THROW(Matrix<int> a({1,2,3,4,5}, 2, 3), std::invalid_argument);
 }
+
+TEST(Matrix, IkjMultiplyMismatchThrows) {
+    Matrix<int> a({1,2,3,4,5,6}, 2, 3);
+    EXPECT_THROW(a.multiply_ikj(a), std::invalid_argument);
+}
+
+TEST(Matrix, ikjMultiply){
+    Matrix<int> A({1,2,3,4,5,6}, 2,3);
+    Matrix<int> B({1,2,3,4,5,6}, 3,2);
+    Matrix<int> C = A*B;
+
+    Matrix<int> ikj = A.multiply_ikj(B);
+
+   EXPECT_EQ(ikj.rows(), C.rows());
+   EXPECT_EQ(ikj.cols(), C.cols());
+
+    for (std::size_t i = 0; i < 2; i++)
+        for (std::size_t j = 0; j < 2; j++)
+            EXPECT_EQ(C(i,j), ikj(i,j));
+}
+
+TEST(Matrix, ikjMultiplyLarge){
+    Matrix<int> A({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35}, 5,7);
+    Matrix<int> B({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42}, 7,6);
+    Matrix<int> C = A*B;
+    Matrix<int> ikj = A.multiply_ikj(B);
+
+   EXPECT_EQ(ikj.rows(), C.rows());
+   EXPECT_EQ(ikj.cols(), C.cols());
+
+   for (std::size_t i = 0; i < 5; i++)
+        for (std::size_t j = 0; j < 6; j++)
+            EXPECT_EQ(C(i,j), ikj(i,j));
+
+
+}
+
