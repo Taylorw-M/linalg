@@ -145,3 +145,33 @@ TEST(Matrix, ikjMultiplyLarge){
 
 }
 
+TEST(Matrix, BlockedMatchesNaiveRectangular) {
+    std::vector<int> a(5 * 7), b(7 * 6);
+    for (std::size_t i = 0; i < a.size(); i++) a[i] = static_cast<int>(i % 11) + 1;
+    for (std::size_t i = 0; i < b.size(); i++) b[i] = static_cast<int>(i % 7) - 3;
+    Matrix<int> A(a, 5, 7), B(b, 7, 6);
+
+    Matrix<int> expected = A * B;
+
+    for (std::size_t bs : {1, 2, 3, 4, 8, 64}) {
+        SCOPED_TRACE("block size " + std::to_string(bs));
+        Matrix<int> got = A.tiling_ikjmultiply(B, bs);
+
+        ASSERT_EQ(got.rows(), expected.rows());
+        ASSERT_EQ(got.cols(), expected.cols());
+        for (std::size_t i = 0; i < expected.rows(); i++)
+            for (std::size_t j = 0; j < expected.cols(); j++)
+                EXPECT_EQ(got(i, j), expected(i, j));
+    }
+}
+
+TEST(Matrix, BlockedZeroBlockSizeThrows) {
+    Matrix<int> a({1,2,3,4}, 2, 2);
+    EXPECT_THROW(a.tiling_ikjmultiply(a, 0), std::invalid_argument);
+}
+
+TEST(Matrix, BlockedMismatchThrows) {
+    Matrix<int> a({1,2,3,4,5,6}, 2, 3);
+    EXPECT_THROW(a.tiling_ikjmultiply(a, 2), std::invalid_argument);
+}
+
