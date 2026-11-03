@@ -26,5 +26,20 @@ static void BM_ikjMultiply(benchmark::State& state) {
     benchmark::Counter::kIs1000);
 
 }
+
+static void BM_TilingMultiply(benchmark::State& state){
+    std::size_t n = state.range(0);
+    std::size_t BLOCK = state.range(1);
+    Matrix<double> a(std::vector<double>(n*n, 1.0), n, n);
+    Matrix<double> b(std::vector<double>(n*n, 1.0), n, n);
+
+    for(auto _ : state) {
+        benchmark::DoNotOptimize(a.tiling_ikjmultiply(b, BLOCK));
+    }
+    state.counters["GFLOPS"] = benchmark::Counter(
+    2.0 * n * n * n, benchmark::Counter::kIsIterationInvariantRate,
+    benchmark::Counter::kIs1000);
+}
 BENCHMARK(BM_NaiveMultiply)->Arg(64)->Arg(128)->Arg(256)->Arg(512)->Arg(1024);
 BENCHMARK(BM_ikjMultiply)->Arg(64)->Arg(128)->Arg(256)->Arg(512)->Arg(1024);
+BENCHMARK(BM_TilingMultiply)->ArgsProduct({{256, 512, 1024}, {16, 32, 64, 128}});
