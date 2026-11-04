@@ -42,4 +42,4 @@ static void BM_TilingMultiply(benchmark::State& state){
 }
 BENCHMARK(BM_NaiveMultiply)->Arg(64)->Arg(128)->Arg(256)->Arg(512)->Arg(1024);
 BENCHMARK(BM_ikjMultiply)->Arg(64)->Arg(128)->Arg(256)->Arg(512)->Arg(1024);
-BENCHMARK(BM_TilingMultiply)->ArgsProduct({{256, 512, 1024}, {16, 32, 64, 128}});
+BENCHMARK(BM_TilingMultiply)->ArgsProduct({{64,128,256, 512, 1024}, {16, 32, 64, 128,256,512}});
